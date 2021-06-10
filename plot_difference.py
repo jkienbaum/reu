@@ -52,7 +52,7 @@ reco_azimuth = np.rad2deg(reco_azimuth)
 true_azimuth = np.rad2deg(true_azimuth)
 
 # my attempt
-difference_azimuth = reco_aziumuth-true_azimuth
+difference_azimuth = np.subtract(reco_aziumuth,true_azimuth)
 
 # now that we've loaded the data, we can make a plot!
 fig = plt.figure(figsize=(5,5))
