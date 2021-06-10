@@ -51,12 +51,15 @@ for file in files:
 reco_azimuth = np.rad2deg(reco_azimuth)
 true_azimuth = np.rad2deg(true_azimuth)
 
+# my attempt
+difference_azimuth = reco_aziumuth-true_azimuth
+
 # now that we've loaded the data, we can make a plot!
 fig = plt.figure(figsize=(5,5))
 ax = fig.add_subplot(111)
 bins = np.linspace(0,360,37) # let's do uniform binning from 0 -> 360 in 10 degree bins
-ax.hist(reco_azimuth,bins=bins, alpha=0.5, label='Reco')
-ax.hist(true_azimuth,bins=bins, alpha=0.5, label='True')
+ax.hist(difference_azimuth,bins=bins, alpha=0.5, label='Reco-True')
+
 ax.set_ylabel('Number of Events')
 ax.set_xlabel('Azimuth [deg]')
 ax.legend()
