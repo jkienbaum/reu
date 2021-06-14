@@ -1,0 +1,37 @@
+#!/bin/bash
+#SBATCH --job-name=runMakeHDF5
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --time=00:10:00
+#SBATCH --export=ALL
+#SBATCH --array=0-5
+#SBATCH --output=logs/run_batch_%A_%a.out
+#SBATCH --error=logs/run_batch_%A_%a.err
+
+# use of the --array tells SLURM to create a variable for each job
+# called $SLURM_ARRAY_TASK_ID that we can use inside that job
+# the array will run from 0 to 100
+
+files_dir=/mnt/research/IceCube/ehe/mc/level2/neutrino-generator/21220/0000000-0000999/
+output_dir=/mnt/research/IceCube/ehe/mc/level2/neutrino-generator/21220/0000000-0000999/
+
+# useful for figuring this out: https://stackoverflow.com/questions/45579828/how-to-process-a-list-of-files-with-slurm
+
+# this gets a list of all files, and puts them into an array
+FILES=($files_dir/*.i3.zst)
+
+# this gets a single entry in that array, corresponding to $SLURM_ARRAY_TASK_ID
+input_file=${FILES[$SLURM_ARRAY_TASK_ID]}
+
+# the basename command isolates just the `Level2_IC86.2016_NuMu.021220.000000` 
+# part of the filename
+output_file=`basename $input_file .i3.zst`
+
+# now, we run the create hdf5 command
+# $TMPDIR is temporary storage space on the compute node
+# we store it there because it's easy
+top_dir=/mnt/home/f0102634/IceCube/ehe/ehe_studies/other/for_jessica
+$top_dir/create_hdf5.py -i $input_file -o $TMPDIR/$output_file
+
+# finally, we move the results
+cp $TMPDIR/*.hdf5 $output_dir/.
