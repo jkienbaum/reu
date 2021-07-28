@@ -355,7 +355,7 @@ del fig, ax
 true_energy = np.log10(true_energy)
 # finally, we can also plot our resolution as a function of energy
 # for that, we're going to borrow a function from Jessie
-plot_1d_binned_slices(truth=true_zenith[qtot_mask],
+plot_1d_binned_slices(truth=true_zenith[qtot_mask & interaction_mask],
 	reco1=linefit_zenith[qtot_mask & interaction_mask],
 	reco2=ophelia_zenith[qtot_mask & interaction_mask],
 	xarray1=true_energy[qtot_mask & interaction_mask],
